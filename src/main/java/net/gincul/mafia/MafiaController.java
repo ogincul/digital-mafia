@@ -10,11 +10,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.gincul.mafia.Player.PlayerState;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 @RestController
 public class MafiaController {	
 	
-	private Map<Long,Game> idToGameMap = new HashMap<Long,Game>();
+    private Map<Long,Game> idToGameMap = new HashMap<Long,Game>();
 
     @RequestMapping("/mafia/new")
     public Game createGame() {
@@ -37,7 +38,9 @@ public class MafiaController {
     }
     
     @RequestMapping("/mafia/players")
+    @CrossOrigin
     private ResponseEntity<Collection<Player>> getGamePlayers(Long gameId, String gameKey, Long playerId, String playerKey) {
+
     	if (isGameKeyValid(gameId, gameKey) || (gameExists(gameId) && isPlayerKeyValid(gameId, playerId, playerKey))) {
         	Game game = idToGameMap.get(gameId);
             return new ResponseEntity<Collection<Player>>(game.getPlayers(), HttpStatus.OK);
@@ -118,9 +121,10 @@ public class MafiaController {
     private boolean isGameKeyValid(Long gameId, String gameKey) {
     	if (gameExists(gameId)) {
     		Game game = idToGameMap.get(gameId);
-    		if (gameKey != null && gameKey.equals(game.getGameKey())) {
+    		if (gameKey != null && gameKey.equals(game.getGameKey().toString())) {
     			return true;
     		}
+                
     	}
     	
     	return false;
@@ -130,7 +134,7 @@ public class MafiaController {
     	if (playerExists(gameId, playerId)) {
     		Game game = idToGameMap.get(gameId);
     		Player player = game.getPlayer(playerId);
-    		if (playerKey != null && playerKey.equals(player.getPlayerKey())) {
+    		if (playerKey != null && playerKey.equals(player.getPlayerKey().toString())) {
     			return true;
     		}
     	}
