@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,7 +17,7 @@ public class MafiaController {
 	
 	private Map<Long,Game> idToGameMap = new HashMap<Long,Game>();
 
-    @RequestMapping("/mafia/new")
+    @RequestMapping("/new")
     public Game createGame() {
     	Game newGame = new Game();
     	idToGameMap.put(newGame.getGameId(), newGame);
@@ -24,7 +25,7 @@ public class MafiaController {
     	return newGame;
     }
     
-    @RequestMapping("/mafia/join")
+    @RequestMapping("/join")
     public ResponseEntity<PlayerWithKey> joinGame(Long gameId, String playerName) {
     	if (gameExists(gameId)) {
         	Game game = idToGameMap.get(gameId);    	
@@ -36,7 +37,8 @@ public class MafiaController {
     	return new ResponseEntity<PlayerWithKey>(HttpStatus.BAD_REQUEST);
     }
     
-    @RequestMapping("/mafia/players")
+    @CrossOrigin
+    @RequestMapping("/players")
     private ResponseEntity<Collection<Player>> getGamePlayers(Long gameId, String gameKey, Long playerId, String playerKey) {
     	if (isGameKeyValid(gameId, gameKey) || (gameExists(gameId) && isPlayerKeyValid(gameId, playerId, playerKey))) {
         	Game game = idToGameMap.get(gameId);
@@ -46,7 +48,7 @@ public class MafiaController {
     	return new ResponseEntity<Collection<Player>>(HttpStatus.BAD_REQUEST);
 	}
     
-    @RequestMapping("/mafia/leave")
+    @RequestMapping("/leave")
     private ResponseEntity<Player> leaveGame(Long gameId, String gameKey, Long playerId) {
     	if (isGameKeyValid(gameId, gameKey) && playerExists(gameId, playerId)) {
         	Game game = idToGameMap.get(gameId);
@@ -58,7 +60,7 @@ public class MafiaController {
     	return new ResponseEntity<Player>(HttpStatus.BAD_REQUEST);
 	}
     
-    @RequestMapping("/mafia/kill")
+    @RequestMapping("/kill")
     private ResponseEntity<Player> killPlayer(Long gameId, String gameKey, Long playerId) {
     	if (isGameKeyValid(gameId, gameKey) && playerExists(gameId, playerId)) {
         	Game game = idToGameMap.get(gameId);
@@ -70,7 +72,7 @@ public class MafiaController {
     	return new ResponseEntity<Player>(HttpStatus.BAD_REQUEST);
 	}
     
-    @RequestMapping("/mafia/vote")
+    @RequestMapping("/vote")
     private ResponseEntity<Player> votePlayer(Long gameId, Long playerId, Long votingPlayerId, String votingPlayerKey) {
     	if (isPlayerKeyValid(gameId, votingPlayerId, votingPlayerKey) && playerExists(gameId, playerId)) {
     		Game game = idToGameMap.get(gameId);
@@ -81,7 +83,7 @@ public class MafiaController {
     	return new ResponseEntity<Player>(HttpStatus.BAD_REQUEST);
 	}
 
-    @RequestMapping("/mafia/unvote")
+    @RequestMapping("/unvote")
     private ResponseEntity<Player> unvotePlayer(Long gameId, Long playerId, Long unvotingPlayerId, String unvotingPlayerKey) {
     	if (isPlayerKeyValid(gameId, unvotingPlayerId, unvotingPlayerKey) && playerExists(gameId, playerId)) {
     		Game game = idToGameMap.get(gameId);

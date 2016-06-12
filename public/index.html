@@ -1,0 +1,19 @@
+<!doctype html>
+<html ng-app>
+	<head>
+		<title>Mafia Dashboard</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.js"></script>
+    	<script src="js/players.js"></script>
+	</head>
+
+	<body>
+		<div ng-controller="Players"> 
+			<table>
+			  <tr ng-repeat="p in players">
+			    <td>{{ p.playerId }}</td>
+			    <td>{{ p.playerName }}</td>
+			  </tr>
+			</table>
+		</div>
+	</body>
+</html>
