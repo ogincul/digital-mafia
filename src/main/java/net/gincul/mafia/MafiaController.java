@@ -118,7 +118,7 @@ public class MafiaController {
     private boolean isGameKeyValid(Long gameId, String gameKey) {
     	if (gameExists(gameId)) {
     		Game game = idToGameMap.get(gameId);
-    		if (gameKey != null && gameKey.equals(game.getGameKey())) {
+    		if (gameKey != null && gameKey.equals(game.getGameKey().toString())) {
     			return true;
     		}
     	}
@@ -130,7 +130,7 @@ public class MafiaController {
     	if (playerExists(gameId, playerId)) {
     		Game game = idToGameMap.get(gameId);
     		Player player = game.getPlayer(playerId);
-    		if (playerKey != null && playerKey.equals(player.getPlayerKey())) {
+    		if (playerKey != null && playerKey.equals(player.getPlayerKey().toString())) {
     			return true;
     		}
     	}
